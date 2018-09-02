@@ -29,6 +29,7 @@ public class Assets {
 
 	public static void reload() {
 		background.reload();
+		ball.reload();
 	}
 
 	public static void playSound(Sound sound) {

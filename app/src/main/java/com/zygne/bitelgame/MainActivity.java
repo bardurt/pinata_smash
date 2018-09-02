@@ -24,7 +24,7 @@ public class MainActivity extends GLGame implements
         VibrationManager.getInstance().init(this);
         MovementSensor.getInstance().init(this);
         MovementSensor.getInstance().addListener(this);
-        MovementSensor.getInstance().start();
+
     }
 
     @Override
@@ -46,8 +46,15 @@ public class MainActivity extends GLGame implements
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        MovementSensor.getInstance().start();
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
+        MovementSensor.getInstance().stop();
     }
 
     @Override

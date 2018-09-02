@@ -34,12 +34,13 @@ public class World {
     }
 
     public void crash(){
-        VibrationManager.getInstance().vibrate();
+        VibrationManager.getInstance().vibrate(300);
         Assets.playSound(Assets.crash);
     }
 
     public void hit(int vib){
         VibrationManager.getInstance().vibrate(vib);
+        Assets.playSound(Assets.crash);
     }
 
     public void onTouch(int x, int y){
