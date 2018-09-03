@@ -19,8 +19,6 @@ public class Ball extends DynamicGameObject {
     private double angleVelocity = 0;
     private double damping = 0.995d;
 
-    private int velUpdated = 0;
-    private double direction = -1;
     private boolean stationary = false;
 
     public Ball(float x, float y, float width, float height) {
@@ -32,56 +30,6 @@ public class Ball extends DynamicGameObject {
     public void update(World world, float deltaTime) {
 
         updatePendulum(deltaTime);
-    }
-
-    private void updateNonPendulum(World world, float deltaTime){
-
-        double distance = velocity.x * direction;
-
-        position.x += distance;
-
-        if (position.x - bounds.width/2 <= 0){
-            position.x = bounds.width/2;
-            direction = 1;
-            velocity.x = 4f;
-            world.crash();
-        } else if(position.x + bounds.width/2 >= 320){
-            position.x = 320 - bounds.width/2;
-            direction = -1;
-            velocity.x = 4f;
-            world.crash();
-        }
-
-        velUpdated++;
-
-        if(velUpdated >= 6) {
-
-            if(velocity.x > 0.5) {
-                velocity.x *= 0.90;
-                velUpdated = 0;
-            }
-        }
-
-        if(Math.abs(distance) <= 0.5){
-
-            if(Math.abs(position.x - anchorX) > 2){
-
-                if(position.x > anchorX){
-                    direction = -1;
-                } else {
-                    direction = 1;
-                }
-
-            } else {
-                stationary = true;
-                velocity.x = 0f;
-            }
-
-            stationary = true;
-        } else {
-            stationary = false;
-        }
-
     }
 
     private void updatePendulum(float dt){

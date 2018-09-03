@@ -24,7 +24,7 @@ public class Assets {
 		ball = new Texture(game, "ball.png", true);
 		ballRegion = new TextureRegion(ball, 0,0, 128,128);
 
-        crash = game.getAudio().newSound("crash.wav");
+        crash = game.getAudio().newSound("crash.ogg");
 	}
 
 	public static void reload() {
