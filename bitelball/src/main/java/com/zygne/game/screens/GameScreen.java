@@ -9,7 +9,6 @@ import com.zygne.game.framework.implementation.Camera2D;
 import com.zygne.game.framework.implementation.FPSCounter;
 import com.zygne.game.framework.implementation.GLScreen;
 import com.zygne.game.framework.implementation.SpriteBatcher;
-import com.zygne.game.framework.math.Rectangle;
 import com.zygne.game.framework.math.Vector2;
 
 import java.util.List;
@@ -33,11 +32,7 @@ public class GameScreen extends GLScreen {
     private Vector2 touchPoint;
     private SpriteBatcher batcher;
     private World world;
-    private World.WorldListener worldListener;
     private WorldRenderer renderer;
-    private Rectangle pauseBounds;
-    private Rectangle resumeBounds;
-    private Rectangle quitBounds;
     private FPSCounter fpsCounter;
 
     public GameScreen(Game game) {
@@ -46,24 +41,9 @@ public class GameScreen extends GLScreen {
         state = GAME_RUNNING;
         guiCam = new Camera2D(glGraphics, 320, 480);
         touchPoint = new Vector2();
-        batcher = new SpriteBatcher(glGraphics, 100);
+        batcher = new SpriteBatcher(glGraphics, 256);
         world = new World();
-        worldListener = new World.WorldListener() {
-            @Override
-            public void shot() {
-
-            }
-
-            @Override
-            public void explosion() {
-
-            }
-        };
-        world.setWorldListener(worldListener);
         renderer = new WorldRenderer(glGraphics);
-        pauseBounds = new Rectangle(480 - 64, 320 - 64, 64, 64);
-        resumeBounds = new Rectangle(240 - 80, 160, 160, 32);
-        quitBounds = new Rectangle(240 - 80, 160 - 32, 160, 32);
         fpsCounter = new FPSCounter();
     }
 
@@ -97,6 +77,8 @@ public class GameScreen extends GLScreen {
                 updateGameOver();
                 break;
         }
+
+        fpsCounter.logFrame();
     }
 
     private void updateGameOver() {
