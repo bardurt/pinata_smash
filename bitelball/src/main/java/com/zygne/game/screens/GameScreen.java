@@ -39,7 +39,7 @@ public class GameScreen extends GLScreen {
         super(game);
 
         state = GAME_RUNNING;
-        guiCam = new Camera2D(glGraphics, 320, 480);
+        guiCam = new Camera2D(glGraphics, Assets.SCREEN_WIDTH, Assets.SCREEN_HEIGHT);
         touchPoint = new Vector2();
         batcher = new SpriteBatcher(glGraphics, 256);
         world = new World();
@@ -106,13 +106,28 @@ public class GameScreen extends GLScreen {
         guiCam.setViewportAndMatrices();
 
         gl.glEnable(GL10.GL_TEXTURE_2D);
+        gl.glEnable(GL10.GL_BLEND);
+        gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
         batcher.beginBatch(Assets.background);
-        batcher.drawSprite(160, 240, 320, 480, Assets.backgroundRegion);
+        batcher.drawSprite(Assets.SCREEN_WIDTH / 2,
+                Assets.SCREEN_HEIGHT / 2,
+                Assets.SCREEN_WIDTH,
+                Assets.SCREEN_HEIGHT,
+                Assets.backgroundRegion);
         batcher.endBatch();
 
         renderer.render(world, deltaTime);
 
+        batcher.beginBatch(Assets.textureUtil);
+        batcher.drawSprite(Assets.SCREEN_WIDTH / 2,
+                Assets.SCREEN_HEIGHT - 64,
+                177,
+                72,
+                Assets.logo);
+        batcher.endBatch();
+
+        gl.glDisable(GL10.GL_BLEND);
         gl.glDisable(GL10.GL_TEXTURE_2D);
     }
 

@@ -1,4 +1,4 @@
-package com.zygne.game.screens;
+package com.zygne.game.particles;
 
 import com.zygne.game.Assets;
 import com.zygne.game.framework.implementation.SpriteBatcher;
@@ -7,20 +7,23 @@ import com.zygne.game.framework.objects.RendableObject;
 
 import javax.microedition.khronos.opengles.GL10;
 
+
 /**
  * TODO define class.
  *
  * @author Bardur Thomsen
- * @version 1.0 05/09/2018.
+ * @version 1.0 04/09/2018.
  */
-public class FallingParticle implements RendableObject {
+
+
+public class Particle implements RendableObject {
 
     public static final int STATE_ALIVE = 0;    // particle is alive
     public static final int STATE_DEAD = 1;        // particle is dead
 
-    public static final int DEFAULT_LIFETIME = 30;    // play with this
-    public static int MAX_DIMENSION = 12;    // the maximum width or height
-    public static final int MAX_SPEED = 2;    // maximum speed (per update)
+    public static final int DEFAULT_LIFETIME = 45;    // play with this
+    public static int MAX_DIMENSION = 5;    // the maximum width or height
+    public static final int MAX_SPEED = 8;    // maximum speed (per update)
 
     private int state;            // particle is alive or dead
     private float width;        // width of the particle
@@ -30,6 +33,7 @@ public class FallingParticle implements RendableObject {
     private int age;            // current age of the particle
     private int lifetime;        // particle dies when it reaches this value
     private int type = 0;
+    private float expansion = 1.01f;
 
     public int getState() {
         return state;
@@ -103,6 +107,10 @@ public class FallingParticle implements RendableObject {
         this.lifetime = lifetime;
     }
 
+    public void setExpansion(float expansion) {
+        this.expansion = expansion;
+    }
+
     // helper methods -------------------------
     public boolean isAlive() {
         return this.state == STATE_ALIVE;
@@ -112,18 +120,23 @@ public class FallingParticle implements RendableObject {
         return this.state == STATE_DEAD;
     }
 
-    public FallingParticle(float x, float y) {
+    public Particle(float x, float y) {
         this.x = x;
         this.y = y;
         this.state = Particle.STATE_ALIVE;
         this.width = rndInt(1, MAX_DIMENSION);
         this.height = this.width;
-        this.lifetime = rndInt(10, DEFAULT_LIFETIME);
+        this.lifetime = DEFAULT_LIFETIME;
         this.age = 0;
-        this.xv = (rndDbl(0, 2) - 1);
-        this.yv = - (rndDbl(0, MAX_SPEED));
-        type = rndInt(0,2);
+        this.xv = (rndDbl(0, MAX_SPEED * 2) - MAX_SPEED);
+        this.yv = (rndDbl(0, MAX_SPEED * 2) - MAX_SPEED);
+        type = rndInt(0, 6);
 
+        // smoothing out the diagonal speed
+        if (xv * xv + yv * yv > MAX_SPEED * MAX_SPEED) {
+            xv *= 0.7;
+            yv *= 0.7;
+        }
     }
 
     // Return an integer that ranges from min inclusive to max inclusive.
@@ -142,8 +155,8 @@ public class FallingParticle implements RendableObject {
 
             this.age++;                        // increase the age of the particle
 
-//            this.width *= 0.99;
-//            this.height *= 0.99;
+            this.width *= expansion;
+            this.height *= expansion;
 
             if (this.age >= this.lifetime) {    // reached the end if its life
                 this.state = STATE_DEAD;
@@ -155,15 +168,23 @@ public class FallingParticle implements RendableObject {
     public void render(GL10 gl, SpriteBatcher batcher) {
         if (this.state != STATE_DEAD) {
 
-            TextureRegion texture = Assets.particleRegion;
+            TextureRegion texture = Assets.confetti1;
 
-            if(type == 1){
-                texture = Assets.particleRegion1;
-            } else if (type == 2){
-                texture = Assets.particleRegion2;
+            if (type == 1) {
+                texture = Assets.confetti2;
+            } else if (type == 2) {
+                texture = Assets.confetti3;
+            } else if (type == 3) {
+                texture = Assets.confetti4;
+            } else if (type == 4) {
+                texture = Assets.confetti5;
+            } else if (type == 5) {
+                texture = Assets.confetti6;
+            } else if (type == 6) {
+                texture = Assets.confetti7;
             }
 
-            batcher.beginBatch(Assets.items);
+            batcher.beginBatch(Assets.textureBall);
             batcher.drawSprite(x,
                     y,
                     width,
@@ -173,18 +194,23 @@ public class FallingParticle implements RendableObject {
         }
     }
 
-    public void reset(float x, float y){
+    public void reset(float x, float y) {
 
         this.x = x;
         this.y = y;
         this.state = Particle.STATE_ALIVE;
         this.width = rndInt(1, MAX_DIMENSION);
         this.height = this.width;
-        this.lifetime = rndInt(10, DEFAULT_LIFETIME);
+        this.lifetime = DEFAULT_LIFETIME;
         this.age = 0;
-        this.xv = (rndDbl(0, 2) - 1);
-        this.yv = -(rndDbl(0, MAX_SPEED));
-        type = rndInt(0,2);
+        this.xv = (rndDbl(0, MAX_SPEED * 2) - MAX_SPEED);
+        this.yv = (rndDbl(0, MAX_SPEED * 2) - MAX_SPEED);
+        type = rndInt(0, 2);
+
+        // smoothing out the diagonal speed
+        if (xv * xv + yv * yv > MAX_SPEED * MAX_SPEED) {
+            xv *= 0.7;
+            yv *= 0.7;
+        }
     }
 }
-

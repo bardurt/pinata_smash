@@ -1,29 +1,29 @@
-package com.zygne.game.screens;
+package com.zygne.game.particles;
+
+import android.util.Log;
 
 import com.zygne.game.Assets;
 import com.zygne.game.framework.implementation.SpriteBatcher;
-import com.zygne.game.framework.implementation.TextureRegion;
 import com.zygne.game.framework.objects.RendableObject;
 
 import javax.microedition.khronos.opengles.GL10;
-
 
 /**
  * TODO define class.
  *
  * @author Bardur Thomsen
- * @version 1.0 04/09/2018.
+ * @version 1.0 08/09/2018.
  */
-
-
-public class Particle implements RendableObject {
+public class HairParticle implements RendableObject {
 
     public static final int STATE_ALIVE = 0;    // particle is alive
     public static final int STATE_DEAD = 1;        // particle is dead
+    public static final int LEFT = 0;    // particle is alive
+    public static final int RIGHT = 1;        // particle is dead
 
-    public static final int DEFAULT_LIFETIME = 45;    // play with this
-    public static int MAX_DIMENSION = 5;    // the maximum width or height
-    public static final int MAX_SPEED = 8;    // maximum speed (per update)
+    public static final int DEFAULT_LIFETIME = 30;    // play with this
+    public static int MAX_DIMENSION = 8;    // the maximum width or height
+    public static final int MAX_SPEED = 2;    // maximum speed (per update)
 
     private int state;            // particle is alive or dead
     private float width;        // width of the particle
@@ -32,8 +32,7 @@ public class Particle implements RendableObject {
     private double xv, yv;        // vertical and horizontal velocity
     private int age;            // current age of the particle
     private int lifetime;        // particle dies when it reaches this value
-    private int type = 0;
-    private float expansion = 1.01f;
+    private int direction;
 
     public int getState() {
         return state;
@@ -107,10 +106,6 @@ public class Particle implements RendableObject {
         this.lifetime = lifetime;
     }
 
-    public void setExpansion(float expansion){
-        this.expansion = expansion;
-    }
-
     // helper methods -------------------------
     public boolean isAlive() {
         return this.state == STATE_ALIVE;
@@ -120,23 +115,22 @@ public class Particle implements RendableObject {
         return this.state == STATE_DEAD;
     }
 
-    public Particle(float x, float y) {
+    public HairParticle(float x, float y, int direction) {
         this.x = x;
         this.y = y;
         this.state = Particle.STATE_ALIVE;
-        this.width = rndInt(1, MAX_DIMENSION);
+        this.width = rndInt(4, MAX_DIMENSION);
         this.height = this.width;
-        this.lifetime = DEFAULT_LIFETIME;
+        this.lifetime = rndInt(10, DEFAULT_LIFETIME);
         this.age = 0;
-        this.xv = (rndDbl(0, MAX_SPEED * 2) - MAX_SPEED);
-        this.yv = (rndDbl(0, MAX_SPEED * 2) - MAX_SPEED);
-        type = rndInt(0,2);
+        this.direction = direction;
+        this.xv = (rndDbl(0, 2));
 
-        // smoothing out the diagonal speed
-        if (xv * xv + yv * yv > MAX_SPEED * MAX_SPEED) {
-            xv *= 0.7;
-            yv *= 0.7;
+        if(direction == LEFT){
+            this.xv *= -1;
         }
+
+        this.yv = - (rndDbl(0, MAX_SPEED));
     }
 
     // Return an integer that ranges from min inclusive to max inclusive.
@@ -155,8 +149,8 @@ public class Particle implements RendableObject {
 
             this.age++;                        // increase the age of the particle
 
-            this.width *= expansion;
-            this.height *= expansion;
+            this.width *= 0.97;
+            this.height *= 0.97;
 
             if (this.age >= this.lifetime) {    // reached the end if its life
                 this.state = STATE_DEAD;
@@ -168,20 +162,13 @@ public class Particle implements RendableObject {
     public void render(GL10 gl, SpriteBatcher batcher) {
         if (this.state != STATE_DEAD) {
 
-            TextureRegion texture = Assets.particleRegion;
-
-            if(type == 1){
-                texture = Assets.particleRegion1;
-            } else if (type == 2){
-                texture = Assets.particleRegion2;
-            }
-
-            batcher.beginBatch(Assets.items);
+            Log.d("HairParticle", "Drawing " + x + ", " + y);
+            batcher.beginBatch(Assets.textureBall);
             batcher.drawSprite(x,
                     y,
                     width,
                     height,
-                    texture);
+                    Assets.hairParticle);
             batcher.endBatch();
         }
     }
@@ -193,16 +180,13 @@ public class Particle implements RendableObject {
         this.state = Particle.STATE_ALIVE;
         this.width = rndInt(1, MAX_DIMENSION);
         this.height = this.width;
-        this.lifetime = DEFAULT_LIFETIME;
+        this.lifetime = rndInt(10, DEFAULT_LIFETIME);
         this.age = 0;
-        this.xv = (rndDbl(0, MAX_SPEED * 2) - MAX_SPEED);
-        this.yv = (rndDbl(0, MAX_SPEED * 2) - MAX_SPEED);
-        type = rndInt(0,2);
+        this.xv = (rndDbl(0, 2));
 
-        // smoothing out the diagonal speed
-        if (xv * xv + yv * yv > MAX_SPEED * MAX_SPEED) {
-            xv *= 0.7;
-            yv *= 0.7;
+        if(direction == LEFT){
+            this.xv *= -1;
         }
+        this.yv = -(rndDbl(0, MAX_SPEED));
     }
 }

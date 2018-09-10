@@ -1,4 +1,4 @@
-package com.zygne.game.screens;
+package com.zygne.game.particles;
 
 import android.util.Log;
 
@@ -11,54 +11,60 @@ import javax.microedition.khronos.opengles.GL10;
  * TODO define class.
  *
  * @author Bardur Thomsen
- * @version 1.0 04/09/2018.
+ * @version 1.0 08/09/2018.
  */
-public class Explosion implements RendableObject {
+public class HairEmitter implements RendableObject {
 
-    private static final String TAG = Explosion.class.getSimpleName();
+    private static final String TAG = HairEmitter.class.getSimpleName();
 
     public static final int STATE_ALIVE = 0;    // at least 1 particle is alive
     public static final int STATE_DEAD = 1;    // all particles are dead
 
-    private Particle[] particles;            // particles in the explosion
-    private int x, y;                        // the explosion's origin
+    private final int minSize = 20;
+    private int maxSize = 10;
+    private HairParticle[] particles;            // particles in the explosion
+    private float x, y;                        // the explosion's origin
     private float gravity;                    // the gravity of the explosion (+ upward, - down)
     private float wind;                        // speed of wind on horizontal
     private int size;                        // number of particles
     private int state;                        // whether it's still active or not
+    private int direction;
 
-    public Explosion(int particleNr, float x, float y) {
-        Log.d(TAG, "Explosion created at " + x + "," + y);
+    public HairEmitter(int particleNr, float x, float y, int direction) {
+        Log.d(TAG, "HairEmitter created at " + x + "," + y);
+        this.x = x;
+        this.y = y;
+        this.direction = direction;
         this.state = STATE_ALIVE;
-        this.particles = new Particle[particleNr];
-        for (int i = 0; i < this.particles.length; i++) {
-            Particle p = new Particle(x, y);
+
+        if(particleNr < minSize){
+            particleNr = minSize;
+        }
+
+        this.particles = new HairParticle[particleNr];
+
+        for(int i = 0; i < minSize; i++) {
+            HairParticle p = new HairParticle(x, y, direction);
             this.particles[i] = p;
         }
-        this.size = particleNr;
+
+        this.size = 10;
+        maxSize = particleNr;
     }
 
-    public Particle[] getParticles() {
-        return particles;
-    }
-
-    public void setParticles(Particle[] particles) {
-        this.particles = particles;
-    }
-
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(float x) {
         this.x = x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(float y) {
         this.y = y;
     }
 
@@ -104,25 +110,31 @@ public class Explosion implements RendableObject {
     }
 
     public void update(float deltaTime) {
-        if (this.state != STATE_DEAD) {
-            boolean isDead = true;
-            for (int i = 0; i < this.particles.length; i++) {
-                if (this.particles[i].isAlive()) {
-                    this.particles[i].update(deltaTime);
-                    isDead = false;
-                }
-            }
-            if (isDead) {
-                this.state = STATE_DEAD;
+
+        createNewParticle();
+
+        for (int i = 0; i < size; i++) {
+            if (this.particles[i].isAlive()) {
+                this.particles[i].update(deltaTime);
+            } else {
+                this.particles[i].reset(x,y);
             }
         }
+
     }
 
     @Override
     public void render(GL10 gl, SpriteBatcher batcher) {
-        for (int i = 0; i < this.particles.length; i++) {
+        for (int i = 0; i < size; i++) {
             this.particles[i].render(gl, batcher);
         }
     }
-}
 
+    private void createNewParticle(){
+
+        if(size < maxSize) {
+            HairParticle p = new HairParticle(x, y, direction);
+            this.particles[size] = p;
+        }
+    }
+}
