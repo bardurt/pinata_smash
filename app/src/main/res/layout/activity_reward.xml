@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="35dp"
+    android:paddingBottom="35dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:background="@drawable/fiesta_bg"
+    tools:context=".RewardActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <ImageButton
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/fiesta_back_button"/>
+
+        <ImageView
+            android:layout_width="177dp"
+            android:layout_height="96dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/fiesta_logo"/>
+
+    </RelativeLayout>
+    
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="164dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="164dp">
+
+            <com.zygne.bitelgame.confetti.engine.view.ExplosionView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:layout_width="275dp"
+                android:layout_height="66dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/felicidades"/>
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_price"
+        android:layout_width="50dp"
+        android:layout_height="144dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/iphone"/>
+
+    <include layout="@layout/layout_price_view"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        
+        <ImageButton
+            android:layout_width="144dp"
+            android:layout_height="54dp"
+            android:background="@drawable/fiesta_share_button"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:layout_width="144dp"
+            android:layout_height="54dp"
+            android:background="@drawable/fiesta_home_button"/>
+        
+    </LinearLayout>
+
+</LinearLayout>

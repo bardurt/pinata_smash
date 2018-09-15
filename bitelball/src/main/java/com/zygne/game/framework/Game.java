@@ -17,4 +17,5 @@ public interface Game {
 
     Screen getStartScreen();
 
+    void onGameStateChanged(int state);
 }

@@ -109,15 +109,12 @@ public class WorldRenderer {
 
         world.arm.render(gl, batcher);
 
-        renderMenu();
+        renderMenu(world);
     }
 
-    private void renderMenu(){
+    private void renderMenu(World world){
 
-        TextureRegion frame = Assets.agitar.getKeyFrame(stateTime,
-                Animation.ANIMATION_LOOPING);
-
-        batcher.beginBatch(Assets.textureUtil);
+        batcher.beginBatch(Assets.textureMenu);
 
         batcher.drawSprite(Assets.SCREEN_WIDTH - (72-26),
                 64,
@@ -125,23 +122,32 @@ public class WorldRenderer {
                 74,
                 Assets.agitarContainer);
 
-        batcher.drawSprite(Assets.SCREEN_WIDTH - (56),
-                96,
-                72,
-                74,
-                frame);
-
         batcher.drawSprite(46,
                 64,
                 72,
                 74,
                 Assets.timerContainer);
 
-        batcher.drawSprite(34,
-                Assets.SCREEN_HEIGHT - 64,
-                48,
-                48,
-                Assets.backButton);
+        Assets.renderBack(batcher);
+
+        TextureRegion frame = Assets.agitar.getKeyFrame(stateTime,
+                Animation.ANIMATION_LOOPING);
+
+        batcher.drawSprite(Assets.SCREEN_WIDTH - (56),
+                96,
+                72,
+                74,
+                frame);
+
+        batcher.endBatch();
+
+        batcher.beginBatch(Assets.textureUtil);
+
+        if(world.getTime() > 9) {
+            Assets.font.drawText(batcher, "" + world.getTime(), 48 - 11, 64 + 12);
+        } else {
+            Assets.font.drawText(batcher, "" + world.getTime(), 48 - 6, 64 + 12);
+        }
 
         batcher.endBatch();
     }

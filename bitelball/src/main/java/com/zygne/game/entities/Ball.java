@@ -117,9 +117,6 @@ public class Ball extends DynamicGameObject implements RendableObject {
 
             stationary = true;
 
-            if (lives < 24) {
-                world.createEmitter();
-            }
         }
     }
 
@@ -130,7 +127,7 @@ public class Ball extends DynamicGameObject implements RendableObject {
     @Override
     public void render(GL10 gl, SpriteBatcher batcher) {
 
-        batcher.beginBatch(Assets.textureBall);
+        batcher.beginBatch(Assets.texturePinata);
 
         TextureRegion textureRegion = null;
 
@@ -186,8 +183,16 @@ public class Ball extends DynamicGameObject implements RendableObject {
 
                 stationary = true;
 
-                if (lives < 24) {
-                    world.createEmitter();
+                if (lives < 15) {
+                    world.createEmitter(8);
+                } else if (lives < 40) {
+                    world.createEmitter(5);
+                } else if (lives < 60) {
+                    world.createEmitter(4);
+                } else if (lives < 80) {
+                    world.createEmitter(3);
+                } else {
+                    world.createEmitter(2);
                 }
             }
         }

@@ -8,10 +8,10 @@ import android.os.PowerManager;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.zygne.game.framework.controls.AndroidInput;
-import com.zygne.game.framework.controls.Input;
 import com.zygne.game.framework.Game;
 import com.zygne.game.framework.Screen;
+import com.zygne.game.framework.controls.AndroidInput;
+import com.zygne.game.framework.controls.Input;
 import com.zygne.game.framework.streams.AndroidAudio;
 import com.zygne.game.framework.streams.AndroidFileIO;
 import com.zygne.game.framework.streams.Audio;
@@ -24,7 +24,10 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by Bardur on 14/03/2017.
  */
 
-public abstract class GLGame extends Activity implements Game, GLSurfaceView.Renderer {
+public abstract class GLGame extends Activity implements
+        Game,
+        GLSurfaceView.Renderer {
+
     enum GLGameState {
         Initialized,
         Running,

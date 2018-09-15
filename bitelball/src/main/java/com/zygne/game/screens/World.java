@@ -10,8 +10,12 @@ import com.zygne.game.particles.HairEmitter;
 
 public class World {
 
+    private float clock = 60;
+
+    private float timer = 0;
     public static final int STATE_INTRO = 0;
     public static final int STATE_GAME = 1;
+    public static final int STATE_FINISH = 2;
 
     public int currentState = STATE_INTRO;
 
@@ -79,14 +83,14 @@ public class World {
     }
 
 	public boolean isGameOver(){
-	    return false;
+	    return currentState == STATE_FINISH;
     }
 
     public void update(float deltaTime, float accelX) {
 
 	    if(currentState == STATE_INTRO){
 	        updateIntro(deltaTime);
-        } else {
+        } else if(currentState == STATE_GAME) {
 	        updateGame(deltaTime);
         }
     }
@@ -101,6 +105,8 @@ public class World {
     }
 
     private void updateGame(float dt){
+
+	    clock -= dt;
 
         ball.update(dt);
         arm.update(this, dt);
@@ -144,6 +150,10 @@ public class World {
             hairEmitter5.setY(ball.position.y + 82);
             hairEmitter5.update(dt);
         }
+
+        if(clock <= 0){
+            this.currentState = STATE_FINISH;
+        }
     }
 
     public void hit(int level){
@@ -153,8 +163,8 @@ public class World {
         explosion = new Explosion(level*5, ball.position.x, ball.position.y);
     }
 
-    public void createEmitter(){
-        this.emitter = new Emitter(64,ball.position.x - 32, ball.position.y - 82);
+    public void createEmitter(int level){
+        this.emitter = new Emitter(60*level,ball.position.x - 32, ball.position.y - 82);
     }
 
     public void onTouch(int x, int y){
@@ -171,5 +181,9 @@ public class World {
             ball.thrust(this, acceleration);
             arm.hit(acceleration);
         }
+    }
+
+    public int getTime(){
+	    return (int) clock;
     }
 }

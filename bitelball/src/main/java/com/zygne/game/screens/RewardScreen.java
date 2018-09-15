@@ -1,8 +1,7 @@
 package com.zygne.game.screens;
 
-import android.util.Log;
-
 import com.zygne.game.Assets;
+import com.zygne.game.entities.ScaleObject;
 import com.zygne.game.framework.Game;
 import com.zygne.game.framework.controls.Input;
 import com.zygne.game.framework.implementation.Camera2D;
@@ -10,6 +9,7 @@ import com.zygne.game.framework.implementation.FPSCounter;
 import com.zygne.game.framework.implementation.GLScreen;
 import com.zygne.game.framework.implementation.SpriteBatcher;
 import com.zygne.game.framework.math.Vector2;
+import com.zygne.game.particles.ExplosiveEmitter;
 
 import java.util.List;
 
@@ -19,32 +19,42 @@ import javax.microedition.khronos.opengles.GL10;
  * TODO define class.
  *
  * @author Bardur Thomsen
- * @version 1.0 01/09/2018.
+ * @version 1.0 15/09/2018.
  */
-public class GameScreen extends GLScreen {
+public class RewardScreen extends GLScreen {
 
-    public static final int GAME_RUNNING = 0;
-    public static final int GAME_PAUSED = 1;
-    public static final int GAME_OVER = 2;
-
-    private int state;
     private Camera2D guiCam;
     private Vector2 touchPoint;
     private SpriteBatcher batcher;
-    private World world;
-    private WorldRenderer renderer;
     private FPSCounter fpsCounter;
 
-    public GameScreen(Game game) {
+    private ScaleObject felicidades;
+    private ScaleObject reward;
+    private ExplosiveEmitter explosiveEmitter;
+
+    public RewardScreen(Game game) {
         super(game);
 
-        state = GAME_RUNNING;
         guiCam = new Camera2D(glGraphics, Assets.SCREEN_WIDTH, Assets.SCREEN_HEIGHT);
         touchPoint = new Vector2();
         batcher = new SpriteBatcher(glGraphics, 256);
-        world = new World();
-        renderer = new WorldRenderer(glGraphics);
         fpsCounter = new FPSCounter();
+
+        felicidades = new ScaleObject(Assets.SCREEN_WIDTH / 2,
+                Assets.SCREEN_HEIGHT - (144),
+                275,
+                66,
+                Assets.felicidades);
+
+        reward = new ScaleObject(Assets.SCREEN_WIDTH / 2,
+                Assets.SCREEN_HEIGHT /2 + 20,
+                50,
+                144,
+                Assets.iPhone);
+
+        explosiveEmitter = new ExplosiveEmitter(200,
+                Assets.SCREEN_WIDTH / 2,
+                Assets.SCREEN_HEIGHT - (144));
     }
 
     @Override
@@ -61,42 +71,17 @@ public class GameScreen extends GLScreen {
             }
 
             guiCam.touchToWorld(touchPoint.set(event.x, event.y));
-
-            world.onTouch((int)touchPoint.x, (int)touchPoint.y);
         }
 
 
-        switch (state) {
-            case GAME_PAUSED:
-                updatePaused();
-                break;
-            case GAME_RUNNING:
-                updateRunning(deltaTime);
-                break;
-            case GAME_OVER:
-                game.setScreen(new RewardScreen(game));
-                break;
-        }
+        felicidades.update(deltaTime);
+        reward.update(deltaTime);
+        explosiveEmitter.update(deltaTime);
+
 
         fpsCounter.logFrame();
     }
 
-    private void updateGameOver() {
-        game.onGameStateChanged(GAME_OVER);
-    }
-
-    private void updateRunning(float deltaTime) {
-
-        world.update(deltaTime, 0);
-
-        if (world.isGameOver()) {
-            state = GAME_OVER;
-        }
-    }
-
-    private void updatePaused() {
-
-    }
 
     @Override
     public void render(float deltaTime) {
@@ -117,11 +102,39 @@ public class GameScreen extends GLScreen {
                 Assets.backgroundRegion);
         batcher.endBatch();
 
-        renderer.render(world, deltaTime);
+        explosiveEmitter.render(gl, batcher);
 
         batcher.beginBatch(Assets.textureMenu);
 
-        Assets.renderLogo(batcher);
+        Assets.renderLogoAndBack(batcher);
+
+        batcher.drawSprite((144/2) + 28,
+                (54 / 2) + 36,
+                144,
+                54,
+                Assets.buttonShare);
+
+        batcher.drawSprite(Assets.SCREEN_WIDTH - ((144/2) + 28),
+                (54 / 2) + 36,
+                144,
+                54,
+                Assets.buttonHome);
+
+        felicidades.render(gl, batcher);
+
+        reward.render(gl, batcher);
+
+        batcher.drawSprite(Assets.SCREEN_WIDTH / 2,
+                148,
+                (Assets.SCREEN_WIDTH - 56) ,
+                128,
+                Assets.textContainer);
+
+        batcher.drawSprite(Assets.SCREEN_WIDTH / 2,
+                206,
+                250 ,
+                50,
+                Assets.hasGanado);
 
         batcher.endBatch();
 
@@ -146,9 +159,6 @@ public class GameScreen extends GLScreen {
 
     @Override
     public void onMovementDetected(double acceleration) {
-
-        world.onMovementDetected(acceleration);
-        Log.d("GameScreen", "Movement detected " + acceleration);
     }
-
 }
+

@@ -32,7 +32,6 @@ public class MainActivity extends GLGame implements
         return new GameScreen(this);
     }
 
-
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         super.onSurfaceCreated(gl, config);
@@ -61,4 +60,10 @@ public class MainActivity extends GLGame implements
     public void onMotionDetected(double acceleraton) {
         getCurrentScreen().onMovementDetected(acceleraton);
     }
+
+    @Override
+    public void onGameStateChanged(int state) {
+
+    }
+
 }
