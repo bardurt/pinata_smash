@@ -52,7 +52,7 @@ public class RewardScreen extends GLScreen {
                 144,
                 Assets.iPhone);
 
-        explosiveEmitter = new ExplosiveEmitter(200,
+        explosiveEmitter = new ExplosiveEmitter(128,
                 Assets.SCREEN_WIDTH / 2,
                 Assets.SCREEN_HEIGHT - (144));
     }

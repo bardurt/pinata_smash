@@ -25,7 +25,7 @@ public class GameScreen extends GLScreen {
 
     public static final int GAME_RUNNING = 0;
     public static final int GAME_PAUSED = 1;
-    public static final int GAME_OVER = 2;
+    public static final int GAME_FINISHED = 2;
 
     private int state;
     private Camera2D guiCam;
@@ -73,8 +73,8 @@ public class GameScreen extends GLScreen {
             case GAME_RUNNING:
                 updateRunning(deltaTime);
                 break;
-            case GAME_OVER:
-                game.setScreen(new RewardScreen(game));
+            case GAME_FINISHED:
+                continueNextScreen();
                 break;
         }
 
@@ -82,15 +82,15 @@ public class GameScreen extends GLScreen {
     }
 
     private void updateGameOver() {
-        game.onGameStateChanged(GAME_OVER);
+        game.onGameStateChanged(GAME_FINISHED);
     }
 
     private void updateRunning(float deltaTime) {
 
         world.update(deltaTime, 0);
 
-        if (world.isGameOver()) {
-            state = GAME_OVER;
+        if (world.isFinished()) {
+            state = GAME_FINISHED;
         }
     }
 
@@ -149,6 +149,15 @@ public class GameScreen extends GLScreen {
 
         world.onMovementDetected(acceleration);
         Log.d("GameScreen", "Movement detected " + acceleration);
+    }
+
+    private void continueNextScreen(){
+
+        if (world.isCompleted()){
+            game.setScreen(new RewardScreen(game));
+        } else {
+            game.setScreen(new GameScreen(game));
+        }
     }
 
 }

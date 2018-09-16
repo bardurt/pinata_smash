@@ -7,6 +7,8 @@ import com.zygne.game.framework.implementation.SpriteBatcher;
 import com.zygne.game.framework.implementation.TextureRegion;
 import com.zygne.game.framework.objects.DynamicGameObject;
 import com.zygne.game.framework.objects.RendableObject;
+import com.zygne.game.particles.Emitter;
+import com.zygne.game.particles.Explosion;
 import com.zygne.game.screens.World;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -19,8 +21,10 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public class Ball extends DynamicGameObject implements RendableObject {
 
-    private int lives = 100;
+    private int level = 0;
+    private int lives = 150;
     private World world;
+    private Explosion explosion;
 
     private final double gravity = -9.81;
     private final int speed = 112;
@@ -31,9 +35,8 @@ public class Ball extends DynamicGameObject implements RendableObject {
     private float damping = 0.995f;
     public float angle = 270f;
     private int length;
-    private boolean stationary = false;
-    private final int stationaryTime = 65;
-    private int stationaryCounter;
+    boolean alive = true;
+    public Emitter emitter;
 
     public Ball(float x, float y, float anchorY, float width, float height) {
         super(x, y, width, height);
@@ -50,6 +53,16 @@ public class Ball extends DynamicGameObject implements RendableObject {
     public void update(float deltaTime) {
 
         updatePendulum(deltaTime);
+
+        if(explosion != null){
+            explosion.update(deltaTime);
+        }
+
+        if(emitter != null) {
+            emitter.setX(position.x + 10);
+            emitter.setY(position.y - 40);
+            emitter.update(deltaTime);
+        }
     }
 
     private void updatePendulum(float dt) {
@@ -65,60 +78,9 @@ public class Ball extends DynamicGameObject implements RendableObject {
         position.x = ballX;
         position.y = ballY;
 
-        if (stationary) {
-
-            stationaryCounter++;
-
-            if (stationaryCounter > stationaryTime) {
-                stationary = false;
-                stationaryCounter = 0;
-            }
-        }
-
         Log.d("Ball", "AngelVel: " + angleVelocity);
     }
 
-    public void thrustLeft() {
-        if (stationary) {
-            angleVelocity = -1;
-        }
-    }
-
-    public void thrustRight() {
-        if (stationary) {
-            angleVelocity = 1;
-        }
-    }
-
-    public void thrust(World world, double acceleration) {
-
-        if (!stationary) {
-
-            int acc = (int) acceleration;
-            Log.d("BALL", "Thrust: " + acceleration);
-
-            if (acc > 3 && acc < 8) {
-                angleVelocity -= 0.85f;
-                world.hit(5);
-                lives -= 3;
-            } else if (acceleration > 8 && acc < 13) {
-                angleVelocity -= 1.1f;
-                world.hit(10);
-                lives -= 8;
-            } else if (acceleration > 14 && acc < 24) {
-                angleVelocity -= 1.53f;
-                world.hit(15);
-                lives -= 16;
-            } else if (acc > 24) {
-                angleVelocity -= 1.8f;
-                world.hit(20);
-                lives -= 22;
-            }
-
-            stationary = true;
-
-        }
-    }
 
     public float getAnchorXOffset() {
         return anchorX + position.x;
@@ -127,74 +89,95 @@ public class Ball extends DynamicGameObject implements RendableObject {
     @Override
     public void render(GL10 gl, SpriteBatcher batcher) {
 
-        batcher.beginBatch(Assets.texturePinata);
+        if(alive) {
+            batcher.beginBatch(Assets.texturePinata);
 
-        TextureRegion textureRegion = null;
+            TextureRegion textureRegion = null;
 
-        if (lives < 15) {
-            textureRegion = Assets.ball5;
-        } else if (lives < 40) {
-            textureRegion = Assets.ball4;
-        } else if (lives < 60) {
-            textureRegion = Assets.ball3;
-        } else if (lives < 80) {
-            textureRegion = Assets.ball2;
+            if (lives < 10) {
+                textureRegion = Assets.ball7;
+            } else if (lives < 25) {
+                textureRegion = Assets.ball6;
+            } else if (lives < 45) {
+                textureRegion = Assets.ball5;
+            } else if (lives < 60) {
+                textureRegion = Assets.ball4;
+            } else if (lives < 75) {
+                textureRegion = Assets.ball3;
+            } else if (lives < 85) {
+                textureRegion = Assets.ball2;
+            } else {
+                textureRegion = Assets.ball1;
+            }
+
+            batcher.drawSprite(position.x,
+                    position.y,
+                    bounds.width,
+                    bounds.height,
+                    textureRegion);
+
+            batcher.drawSprite(world.ball.position.x - 14,
+                    world.ball.position.y + 192,
+                    4,
+                    256,
+                    Assets.rope);
+
+            batcher.endBatch();
+
+            if (emitter != null) {
+                emitter.render(gl, batcher);
+            }
+
         } else {
-            textureRegion = Assets.ball1;
+            if (explosion != null) {
+                explosion.render(gl, batcher);
+            }
         }
-
-        batcher.drawSprite(position.x,
-                position.y,
-                bounds.width,
-                bounds.height,
-                textureRegion);
-
-        batcher.endBatch();
     }
 
     public void hit(double acceleration) {
 
-        float diff = position.x - anchorX;
+        if(alive) {
+            float diff = position.x - anchorX;
 
-        if (Math.abs(diff) < (bounds.width/2)) {
-
-            if (!stationary) {
+            if (Math.abs(diff) < (bounds.width / 3)) {
 
                 int acc = (int) acceleration;
                 Log.d("BALL", "Thrust: " + acceleration);
 
-                if (acc > 3 && acc < 8) {
-                    angleVelocity -= 0.85f;
+                if (acc > 3 && acc < 10) {
+                    angleVelocity -= 0.2f;
                     world.hit(5);
-                    lives -= 3;
-                } else if (acceleration > 8 && acc < 13) {
-                    angleVelocity -= 1.1f;
+                    lives -= 1;
+                } else if (acceleration >= 10 && acc < 13) {
+                    angleVelocity -= 0.35f;
                     world.hit(10);
-                    lives -= 8;
-                } else if (acceleration > 14 && acc < 24) {
-                    angleVelocity -= 1.53f;
+                    lives -= 2;
+                } else if (acceleration >= 13) {
+                    angleVelocity -= 0.5f;
                     world.hit(15);
-                    lives -= 16;
-                } else if (acc > 24) {
-                    angleVelocity -= 1.8f;
-                    world.hit(20);
-                    lives -= 22;
+                    lives -= 2;
                 }
 
-                stationary = true;
-
-                if (lives < 15) {
-                    world.createEmitter(8);
-                } else if (lives < 40) {
-                    world.createEmitter(5);
-                } else if (lives < 60) {
-                    world.createEmitter(4);
-                } else if (lives < 80) {
-                    world.createEmitter(3);
-                } else {
-                    world.createEmitter(2);
+                if (lives < 0) {
+                    alive = false;
+                    explosion = new Explosion(300, position.x, position.y);
+                } else if (lives < 15) {
+                    createEmitter(5);
+                } else if (lives < 30) {
+                    createEmitter(2);
+                } else if (lives < 50) {
+                    createEmitter(1);
                 }
             }
         }
+    }
+
+    private void createEmitter(int level){
+        this.emitter = new Emitter(20*level,position.x - 32, position.y - 82);
+    }
+
+    public boolean isDead(){
+        return !alive;
     }
 }

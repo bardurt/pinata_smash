@@ -48,6 +48,9 @@ public class MainActivity extends GLGame implements
     public void onResume() {
         super.onResume();
         MovementSensor.getInstance().start();
+        if(!firstTimeCreate){
+            Assets.reload();
+        }
     }
 
     @Override

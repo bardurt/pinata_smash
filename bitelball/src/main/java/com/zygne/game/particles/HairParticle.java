@@ -162,14 +162,6 @@ public class HairParticle implements RendableObject {
     public void render(GL10 gl, SpriteBatcher batcher) {
         if (this.state != STATE_DEAD) {
 
-            Log.d("HairParticle", "Drawing " + x + ", " + y);
-            batcher.beginBatch(Assets.textureBall);
-            batcher.drawSprite(x,
-                    y,
-                    width,
-                    height,
-                    Assets.hairParticle);
-            batcher.endBatch();
         }
     }
 

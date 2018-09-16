@@ -48,7 +48,7 @@ public class WorldRenderer {
             textureRegion = Assets.intro1;
         }
 
-        batcher.beginBatch(Assets.textureUtil);
+        batcher.beginBatch(Assets.textureMenu);
 
         batcher.drawSprite(
                 Assets.SCREEN_WIDTH / 2,
@@ -64,21 +64,8 @@ public class WorldRenderer {
         stateTime += deltaTime;
 
         GL10 gl = glGraphics.getGL();
-        batcher.beginBatch(Assets.textureBall);
 
         world.ball.render(gl, batcher);
-
-        if (world.hairEmitter4 != null) {
-            world.hairEmitter4.render(gl, batcher);
-        }
-
-        batcher.drawSprite(world.ball.position.x - 4,
-                world.ball.position.y + 192,
-                8,
-                256,
-                Assets.rope);
-
-        batcher.endBatch();
 
         if (world.explosion != null) {
             if (world.explosion.isAlive()) {
@@ -86,28 +73,9 @@ public class WorldRenderer {
             }
         }
 
-        if (world.emitter != null) {
-            world.emitter.render(gl, batcher);
-        }
-
-        if (world.hairEmitter1 != null) {
-            world.hairEmitter1.render(gl, batcher);
-        }
-
-        if (world.hairEmitter2 != null) {
-            world.hairEmitter2.render(gl, batcher);
-        }
-
-        if (world.hairEmitter3 != null) {
-            world.hairEmitter3.render(gl, batcher);
-        }
-
-
-        if (world.hairEmitter5 != null) {
-            world.hairEmitter5.render(gl, batcher);
-        }
-
         world.arm.render(gl, batcher);
+
+        world.speaker.render(gl, batcher);
 
         renderMenu(world);
     }
@@ -139,14 +107,10 @@ public class WorldRenderer {
                 74,
                 frame);
 
-        batcher.endBatch();
-
-        batcher.beginBatch(Assets.textureUtil);
-
         if(world.getTime() > 9) {
             Assets.font.drawText(batcher, "" + world.getTime(), 48 - 11, 64 + 12);
         } else {
-            Assets.font.drawText(batcher, "" + world.getTime(), 48 - 6, 64 + 12);
+            Assets.font.drawText(batcher, "" + world.getTime(), 48 - 5, 64 + 12);
         }
 
         batcher.endBatch();

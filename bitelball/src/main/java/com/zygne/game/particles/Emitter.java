@@ -43,7 +43,7 @@ public class Emitter implements RendableObject {
 
         this.particles = new FallingParticle[particleNr];
 
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < minSize; i++) {
             FallingParticle p = new FallingParticle(x, y);
             this.particles[i] = p;
         }
@@ -133,8 +133,14 @@ public class Emitter implements RendableObject {
     private void createNewParticle(){
 
         if(size < maxSize) {
-            FallingParticle p = new FallingParticle(x, y);
-            this.particles[size] = p;
+
+            for(int i = 0; i < 5; i++) {
+                if(size < maxSize) {
+                    FallingParticle p = new FallingParticle(x, y);
+                    this.particles[size] = p;
+                    size++;
+                }
+            }
         }
     }
 }

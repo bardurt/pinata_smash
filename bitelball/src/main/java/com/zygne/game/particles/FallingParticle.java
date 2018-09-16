@@ -122,7 +122,7 @@ public class FallingParticle implements RendableObject {
         this.age = 0;
         this.xv = (rndDbl(0, 2) - 1);
         this.yv = - (rndDbl(0, MAX_SPEED));
-        type = rndInt(0,6);
+        type = rndInt(0,17);
 
     }
 
@@ -155,23 +155,9 @@ public class FallingParticle implements RendableObject {
     public void render(GL10 gl, SpriteBatcher batcher) {
         if (this.state != STATE_DEAD) {
 
-            TextureRegion texture = Assets.confetti1;
+            TextureRegion texture = Assets.confettiList[type];
 
-            if (type == 1) {
-                texture = Assets.confetti2;
-            } else if (type == 2) {
-                texture = Assets.confetti3;
-            } else if (type == 3) {
-                texture = Assets.confetti4;
-            } else if (type == 4) {
-                texture = Assets.confetti5;
-            } else if (type == 5) {
-                texture = Assets.confetti6;
-            } else if (type == 6) {
-                texture = Assets.confetti7;
-            }
-
-            batcher.beginBatch(Assets.textureBall);
+            batcher.beginBatch(Assets.textureMenu);
             batcher.drawSprite(x,
                     y,
                     width,
@@ -192,7 +178,7 @@ public class FallingParticle implements RendableObject {
         this.age = 0;
         this.xv = (rndDbl(0, 2) - 1);
         this.yv = -(rndDbl(0, MAX_SPEED));
-        type = rndInt(0,2);
+        type = rndInt(0,17);
     }
 }
 

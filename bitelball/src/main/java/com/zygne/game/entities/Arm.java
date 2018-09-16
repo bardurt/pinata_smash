@@ -1,7 +1,5 @@
 package com.zygne.game.entities;
 
-import android.util.Log;
-
 import com.zygne.game.Assets;
 import com.zygne.game.framework.implementation.SpriteBatcher;
 import com.zygne.game.framework.objects.DynamicGameObject;
@@ -39,7 +37,7 @@ public class Arm extends DynamicGameObject implements RendableObject {
 
         if(hitting){
             updateHitting();
-            if(angle > 45){
+            if(angle >= 45){
                 hitting = false;
                 world.ball.hit(force);
             }
@@ -49,6 +47,7 @@ public class Arm extends DynamicGameObject implements RendableObject {
                 angle -= 10;
                 if(angle < 0){
                     angle = 0;
+                    hitting = false;
                 }
             }
         }
@@ -62,7 +61,13 @@ public class Arm extends DynamicGameObject implements RendableObject {
 
     public void hit(double force){
         if(!hitting) {
-            this.force = force;
+
+            if(force < 20) {
+                this.force = force;
+            } else {
+                this.force = 20;
+            }
+
             this.hitting = true;
         }
     }
@@ -70,7 +75,7 @@ public class Arm extends DynamicGameObject implements RendableObject {
     @Override
     public void render(GL10 gl, SpriteBatcher batcher) {
 
-        batcher.beginBatch(Assets.textureBall);
+        batcher.beginBatch(Assets.texturePinata);
 
         batcher.drawSprite(x,
                 y,

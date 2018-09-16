@@ -20,7 +20,7 @@ public class ExplosiveEmitter implements RendableObject {
     public static final int STATE_ALIVE = 0;    // at least 1 particle is alive
     public static final int STATE_DEAD = 1;    // all particles are dead
 
-    private final int minSize = 10;
+    private final int minSize = 20;
     private int maxSize = 10;
     private ConfettiParticle[] particles;            // particles in the explosion
     private float x, y;                        // the explosion's origin
@@ -43,7 +43,7 @@ public class ExplosiveEmitter implements RendableObject {
 
         this.particles = new ConfettiParticle[particleNr];
 
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < minSize; i++) {
             ConfettiParticle p = new ConfettiParticle(x, y);
             this.particles[i] = p;
         }
@@ -133,8 +133,14 @@ public class ExplosiveEmitter implements RendableObject {
     private void createNewParticle(){
 
         if(size < maxSize) {
-            ConfettiParticle p = new ConfettiParticle(x, y);
-            this.particles[size] = p;
+
+            for(int i = 0; i < 5; i++) {
+                if(size < maxSize) {
+                    ConfettiParticle p = new ConfettiParticle(x, y);
+                    this.particles[size] = p;
+                    size++;
+                }
+            }
         }
     }
 }
