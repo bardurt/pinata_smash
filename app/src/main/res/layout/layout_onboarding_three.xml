@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:gravity="center_horizontal"
+    android:padding="8dp"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:text="Objetivo"
+        android:textColor="#00e1d7"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+
+    <LinearLayout
+        android:layout_width="250dp"
+        android:layout_height="114dp"
+        android:background="@drawable/confeti"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="155dp"
+            android:layout_height="116dp"
+            android:src="@drawable/pinata" />
+
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="24dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:fontFamily="sans-serif"
+        android:textStyle="normal"
+        android:textColor="#7c7c7c"
+        android:lineSpacingExtra="5sp"
+        android:gravity="center_horizontal"
+        android:text="Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit Aenean dignissim pellentesque." />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="24dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:background="@drawable/circle_lightgray"/>
+
+        <Space
+            android:layout_width="12dp"
+            android:layout_height="0dp" />
+
+        <ImageView
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:background="@drawable/circle_lightgray"/>
+
+        <Space
+            android:layout_width="12dp"
+            android:layout_height="0dp" />
+
+        <ImageView
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:background="@drawable/circle_purple"/>
+
+    </LinearLayout>
+
+</LinearLayout>

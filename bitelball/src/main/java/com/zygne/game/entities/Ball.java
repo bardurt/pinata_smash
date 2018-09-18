@@ -59,8 +59,8 @@ public class Ball extends DynamicGameObject implements RendableObject {
         }
 
         if(emitter != null) {
-            emitter.setX(position.x + 10);
-            emitter.setY(position.y - 40);
+            emitter.setX(position.x + 2);
+            emitter.setY(position.y - 34);
             emitter.update(deltaTime);
         }
     }
@@ -79,6 +79,20 @@ public class Ball extends DynamicGameObject implements RendableObject {
         position.y = ballY;
 
         Log.d("Ball", "AngelVel: " + angleVelocity);
+
+        if (lives < 10) {
+            level = 6;
+        } else if (lives < 25) {
+            level = 5;
+        } else if (lives < 45) {
+            level = 4;
+        } else if (lives < 60) {
+            level = 3;
+        } else if (lives < 85) {
+            level = 2;
+        } else if (lives < 100) {
+            level = 1;
+        }
     }
 
 
@@ -94,20 +108,20 @@ public class Ball extends DynamicGameObject implements RendableObject {
 
             TextureRegion textureRegion = null;
 
-            if (lives < 10) {
-                textureRegion = Assets.ball7;
-            } else if (lives < 25) {
-                textureRegion = Assets.ball6;
-            } else if (lives < 45) {
-                textureRegion = Assets.ball5;
-            } else if (lives < 60) {
-                textureRegion = Assets.ball4;
-            } else if (lives < 75) {
-                textureRegion = Assets.ball3;
-            } else if (lives < 85) {
-                textureRegion = Assets.ball2;
-            } else {
+            if(level == 0){
                 textureRegion = Assets.ball1;
+            } else if (level == 1){
+                textureRegion = Assets.ball2;
+            } else if (level == 2){
+                textureRegion = Assets.ball3;
+            } else if (level == 3){
+                textureRegion = Assets.ball4;
+            } else if (level == 4){
+                textureRegion = Assets.ball5;
+            } else if (level == 5){
+                textureRegion = Assets.ball6;
+            } else if (level == 6){
+                textureRegion = Assets.ball7;
             }
 
             batcher.drawSprite(position.x,
@@ -127,6 +141,8 @@ public class Ball extends DynamicGameObject implements RendableObject {
             if (emitter != null) {
                 emitter.render(gl, batcher);
             }
+
+            Assets.font.drawText(batcher, "L: " + lives, Assets.SCREEN_WIDTH / 2, Assets.SCREEN_HEIGHT / 2);
 
         } else {
             if (explosion != null) {
@@ -161,7 +177,7 @@ public class Ball extends DynamicGameObject implements RendableObject {
 
                 if (lives < 0) {
                     alive = false;
-                    explosion = new Explosion(300, position.x, position.y);
+                    explosion = new Explosion(200, position.x, position.y);
                 } else if (lives < 15) {
                     createEmitter(5);
                 } else if (lives < 30) {
@@ -174,7 +190,7 @@ public class Ball extends DynamicGameObject implements RendableObject {
     }
 
     private void createEmitter(int level){
-        this.emitter = new Emitter(20*level,position.x - 32, position.y - 82);
+        this.emitter = new Emitter(20*level,position.x - 32, position.y - 78);
     }
 
     public boolean isDead(){

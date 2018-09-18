@@ -62,10 +62,10 @@ public class Arm extends DynamicGameObject implements RendableObject {
     public void hit(double force){
         if(!hitting) {
 
-            if(force < 20) {
+            if(force < 15) {
                 this.force = force;
             } else {
-                this.force = 20;
+                this.force = 15;
             }
 
             this.hitting = true;

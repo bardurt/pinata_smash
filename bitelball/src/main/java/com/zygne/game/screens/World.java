@@ -56,14 +56,9 @@ public class World {
 
     }
 
-    public boolean isGameOver() {
-        return currentState == STATE_GAME_OVER;
-    }
-
     public boolean isCompleted() {
         return currentState == STATE_COMPLETED;
     }
-
 
     public void update(float deltaTime, float accelX) {
 
@@ -105,8 +100,9 @@ public class World {
         if (ball.isDead()) {
             outroTimer+= dt;
 
-            if(outroTimer > 2) {
+            if(outroTimer > 1.5) {
                 this.currentState = STATE_COMPLETED;
+
             }
         }
 
@@ -136,4 +132,5 @@ public class World {
     public int getTime() {
         return (int) clock;
     }
+
 }

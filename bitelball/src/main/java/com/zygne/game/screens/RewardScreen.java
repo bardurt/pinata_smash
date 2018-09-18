@@ -136,6 +136,8 @@ public class RewardScreen extends GLScreen {
                 50,
                 Assets.hasGanado);
 
+        Assets.font.drawText(batcher,"Iphone",(Assets.SCREEN_WIDTH / 2) - (3*16), 148 +15 );
+
         batcher.endBatch();
 
         gl.glDisable(GL10.GL_BLEND);

@@ -34,6 +34,7 @@ public class GameScreen extends GLScreen {
     private World world;
     private WorldRenderer renderer;
     private FPSCounter fpsCounter;
+    private boolean isRunning;
 
     public GameScreen(Game game) {
         super(game);
@@ -45,6 +46,7 @@ public class GameScreen extends GLScreen {
         world = new World();
         renderer = new WorldRenderer(glGraphics);
         fpsCounter = new FPSCounter();
+        isRunning = true;
     }
 
     @Override
@@ -153,10 +155,13 @@ public class GameScreen extends GLScreen {
 
     private void continueNextScreen(){
 
-        if (world.isCompleted()){
-            game.setScreen(new RewardScreen(game));
-        } else {
-            game.setScreen(new GameScreen(game));
+        if(isRunning) {
+            if (world.isCompleted()) {
+                game.onGameStateChanged(0);
+            } else {
+                game.onGameStateChanged(1);
+            }
+            isRunning = false;
         }
     }
 

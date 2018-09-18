@@ -23,7 +23,7 @@ public abstract class BaseParticle implements RendableObject, UpdatableObject {
     public static final int STATE_DEAD = 1;         // particle is dead
 
     public static final int DEFAULT_LIFETIME = 45;  // default lifetime for a particle
-    public static final int MAX_DIMENSION = 8;      // the maximum width or height
+    public static final int MAX_DIMENSION = 32;      // the maximum width or height
     public static final int MAX_SPEED = 12;          // maximum speed (per update)
     public static final float DEFAULT_EXPANSION = 1.01f;
 

@@ -1,5 +1,6 @@
 package com.zygne.bitelgame;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.zygne.game.Assets;
@@ -13,7 +14,7 @@ import com.zygne.game.screens.GameScreen;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-public class MainActivity extends GLGame implements
+public class FiestaGameActivity extends GLGame implements
         MovementSensor.Listener {
 
     boolean firstTimeCreate = true;
@@ -67,6 +68,11 @@ public class MainActivity extends GLGame implements
     @Override
     public void onGameStateChanged(int state) {
 
+        if(state == 0){
+            startActivity(new Intent(FiestaGameActivity.this, RewardActivity.class));
+        } else {
+            startActivity(new Intent(FiestaGameActivity.this, GameOverActivity.class));
+        }
     }
 
 }

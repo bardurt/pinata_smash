@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fiesta_bg"
+    android:orientation="vertical"
+    android:paddingBottom="35dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="35dp"
+    tools:context=".FiestaIntroActivity">
+
+
+    <ImageButton
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/fiesta_back_button"/>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="48dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="396dp">
+
+            <LinearLayout
+                android:id="@+id/ll_intro_container"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/rectangle_round_corners"
+                android:gravity="center_horizontal"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="8dp"
+                android:paddingTop="24dp"
+                android:orientation="vertical"
+                android:layout_marginBottom="20dp">
+
+               <com.zygne.bitelgame.views.OnboardingOneView
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"/>
+
+            </LinearLayout>
+
+
+            <ImageView
+                android:id="@+id/iv_next"
+                android:layout_width="164dp"
+                android:layout_height="54dp"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/btn_continue" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -36,16 +36,15 @@ public abstract class GLGame extends Activity implements
         Idle
     }
 
-    GLSurfaceView glView;
-    GLGraphics glGraphics;
-    Audio audio;
-    Input input;
-    FileIO fileIO;
-    Screen screen;
-    GLGameState state = GLGameState.Initialized;
-    Object stateChanged = new Object();
-    long startTime = System.nanoTime();
-    PowerManager.WakeLock wakeLock;
+    protected GLSurfaceView glView;
+    protected GLGraphics glGraphics;
+    protected Audio audio;
+    protected Input input;
+    protected FileIO fileIO;
+    protected Screen screen;
+    protected GLGameState state = GLGameState.Initialized;
+    protected Object stateChanged = new Object();
+    protected long startTime = System.nanoTime();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,19 +55,19 @@ public abstract class GLGame extends Activity implements
         glView = new GLSurfaceView(this);
         glView.setRenderer(this);
         setContentView(glView);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         glGraphics = new GLGraphics(glView);
         fileIO = new AndroidFileIO(getAssets());
         audio = new AndroidAudio(this);
         input = new AndroidInput(this, glView, 1, 1);
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "GLGame");
+
     }
 
     public void onResume() {
         super.onResume();
         glView.onResume();
-        wakeLock.acquire();
     }
 
     @Override
@@ -137,7 +136,7 @@ public abstract class GLGame extends Activity implements
                 }
             }
         }
-        wakeLock.release();
+
         glView.onPause();
         super.onPause();
     }
