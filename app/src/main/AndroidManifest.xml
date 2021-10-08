@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.zygne.bitelgame">
+    package="com.zygne.pinata">
 
     <application
         android:allowBackup="true"
@@ -10,24 +10,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".FiestaIntroActivity"
-            android:noHistory="true"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name=".FiestaGameActivity"
+            android:name="com.zygne.pinata.GameActivity"
             android:screenOrientation="portrait"
             android:noHistory="true"/>
         <activity
-            android:name=".FiestaMenuActivity"
+            android:name="com.zygne.pinata.MenuActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RewardActivity" />
-        <activity android:name=".GameOverActivity"></activity>
     </application>
 
 </manifest>
